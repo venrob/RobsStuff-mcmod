@@ -1,10 +1,10 @@
 package com.venrob.robsstuff.init;
 
 import com.venrob.robsstuff.items.ItemBase;
-import com.venrob.robsstuff.util.IHasModel;
 import net.minecraft.item.Item;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ModItems {
 

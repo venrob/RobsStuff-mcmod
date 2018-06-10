@@ -29,8 +29,7 @@ public class ItemBase extends Item implements IHasModel {
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
     {
-        if(!ttip.equals(""))
-            tooltip.add(ttip);
+        tooltip.add(ttip);
     }
 
     @Override

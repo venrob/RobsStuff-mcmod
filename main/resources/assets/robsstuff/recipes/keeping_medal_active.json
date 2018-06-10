@@ -1,24 +1,19 @@
 {
   "type": "minecraft:crafting_shaped",
-
-  "pattern": {
-    "ddd",
-    "dKd",
-    "ddd"
-  },
-
+  "pattern": [
+    "DDD",
+    "D#D",
+    "DDD"
+  ],
   "key": {
-    "K": {
-      "item": "robsstuff:keeping_medal_off"
-    },
-
-    "d": {
+    "D": {
       "item": "minecraft:dragon_breath"
+    },
+    "#": {
+      "item": "robsstuff:keeping_medal_off"
     }
   },
-
-  "result":
-  {
+  "result": {
     "item": "robsstuff:keeping_medal",
     "count": 1
   }
