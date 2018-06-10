@@ -3,28 +3,34 @@ package com.venrob.robsstuff.items;
 import com.venrob.robsstuff.Main;
 import com.venrob.robsstuff.init.ModItems;
 import com.venrob.robsstuff.util.IHasModel;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemBase extends Item implements IHasModel {
     private boolean hasEnchantGlow;
-    public ItemBase(String name){
-        this(name,false, 64);
-    }
-    public ItemBase(String name, int stack){
-        this(name, false, stack);
-    }
-    public ItemBase(String name, boolean glow){
-        this(name, glow, 64);
-    }
-    public ItemBase(String name,boolean glow, int stack){
+    private String ttip;
+
+    public ItemBase(String name,boolean glow, int stack, String ttip){
         setUnlocalizedName(name);
         setRegistryName(name);
         setCreativeTab(CreativeTabs.MISC);
         setMaxStackSize(stack);
         this.hasEnchantGlow = glow;
+        this.ttip=ttip;
         ModItems.ITEMS.add(this);
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
+    {
+        if(!ttip.equals(""))
+            tooltip.add(ttip);
     }
 
     @Override

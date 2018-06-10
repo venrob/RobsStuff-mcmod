@@ -1,0 +1,25 @@
+{
+    "type": "minecraft:crafting_shaped",
+
+    "pattern": {
+        "nDn",
+        "DnD",
+        "nDn"
+    },
+
+    "key": {
+        "D": {
+          "item": "minecraft:diamond_block"
+        },
+
+        "n": {
+          "item": "minecraft:nether_star"
+        }
+    },
+
+    "result":
+    {
+      "item": "robsstuff:keeping_medal_off",
+      "count": 1
+    }
+}

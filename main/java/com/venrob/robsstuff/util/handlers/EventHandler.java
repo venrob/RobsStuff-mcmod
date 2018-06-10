@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -21,7 +22,8 @@ public class EventHandler {
             boolean hasMedal = false;//Assume no medal
             for(ItemStack stack : player.inventory.mainInventory){//Check each stack of inventory for medal
                 if(stack.getItem()==ModItems.KEEP_MEDAL){
-                    stack.setCount(stack.getCount()-1);//Remove one medal
+                    stack.setCount(stack.getCount()-1);//Remove medal
+                    player.inventory.addItemStackToInventory(new ItemStack(ModItems.KEEP_MEDAL_OFF));
                     hasMedal = true;
                     break;
                 }
@@ -30,6 +32,7 @@ public class EventHandler {
                 ItemStack offhand = player.inventory.offHandInventory.get(0);
                 if(offhand.getItem().equals(ModItems.KEEP_MEDAL)){//Same check as above, for offhand slot
                     offhand.setCount(offhand.getCount()-1);
+                    player.inventory.addItemStackToInventory(new ItemStack(ModItems.KEEP_MEDAL_OFF));
                     hasMedal = true;
                 }
             }
