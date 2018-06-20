@@ -39,6 +39,6 @@ public class ItemBase extends Item implements IHasModel {
 
     @Override
     public boolean hasEffect(ItemStack stack){
-        return hasEnchantGlow||stack.isItemEnchanted();
+        return hasEnchantGlow||super.hasEffect(stack);
     }
 }

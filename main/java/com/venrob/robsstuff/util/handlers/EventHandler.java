@@ -1,7 +1,7 @@
 package com.venrob.robsstuff.util.handlers;
 
 import com.venrob.robsstuff.init.ModItems;
-import com.venrob.robsstuff.util.datastore.playerInvStore;
+import com.venrob.robsstuff.util.datastore.PlayerInvStore;
 import com.venrob.robsstuff.util.exceptions.noSuchPlayerException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -36,7 +36,7 @@ public class EventHandler {
                 }
             }
             if(hasMedal) {
-                playerInvStore.invStore.storeInv(player);
+                PlayerInvStore.invStore.storeInv(player);
                 player.inventory.clear();
             }
         }
@@ -48,7 +48,7 @@ public class EventHandler {
             EntityPlayer original = event.getOriginal();
             EntityPlayer clone = event.getEntityPlayer();
             try {
-                clone.inventory.copyInventory(playerInvStore.invStore.fetchInv(original.getEntityId(), true));
+                clone.inventory.copyInventory(PlayerInvStore.invStore.fetchInv(original.getEntityId(), true));
             } catch(noSuchPlayerException ignored){}
         }
     }
