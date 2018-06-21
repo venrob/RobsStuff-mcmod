@@ -1,7 +1,9 @@
 package com.venrob.robsstuff.proxy;
 
+import com.venrob.robsstuff.init.ModBlocks;
 import com.venrob.robsstuff.init.ModItems;
 import com.venrob.robsstuff.util.IHasModel;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -24,6 +26,11 @@ public class ClientProxy extends CommonProxy {
         for(Item item : ModItems.ITEMS){
             if(item instanceof IHasModel){
                 ((IHasModel)item).registerModels();
+            }
+        }
+        for(Block block : ModBlocks.BLOCKS){
+            if(block instanceof IHasModel){
+                ((IHasModel)block).registerModels();
             }
         }
     }

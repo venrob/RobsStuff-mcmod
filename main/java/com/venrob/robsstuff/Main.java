@@ -1,7 +1,10 @@
 package com.venrob.robsstuff;
 
+import com.venrob.robsstuff.init.ModItems;
 import com.venrob.robsstuff.proxy.CommonProxy;
 import com.venrob.robsstuff.util.Reference;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -12,6 +15,13 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.NAME, version = Reference.VERSION)
 public class Main {
+    public static final CreativeTabs robsStuff = new CreativeTabs("RobsStuff") {
+        @Override
+        public ItemStack getTabIconItem() {
+            return new ItemStack(ModItems.KEEP_MEDAL_OFF);
+        }
+    };
+
 
     @Instance
     public static Main instance;

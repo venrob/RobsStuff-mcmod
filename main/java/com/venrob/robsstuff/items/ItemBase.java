@@ -19,7 +19,7 @@ public class ItemBase extends Item implements IHasModel {
     public ItemBase(String name,boolean glow, int stack, String ttip){
         setUnlocalizedName(name);
         setRegistryName(name);
-        setCreativeTab(CreativeTabs.MISC);
+        setCreativeTab(Main.robsStuff);
         setMaxStackSize(stack);
         this.hasEnchantGlow = glow;
         this.ttip=ttip;
