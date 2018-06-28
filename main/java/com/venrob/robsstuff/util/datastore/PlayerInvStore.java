@@ -23,12 +23,11 @@ public class PlayerInvStore {
 
     /**
      * Store the inventory of a player, referenced by their entity id.
-     * @param player    The player whose inventory is to be stored
+     * @param inv       The inventory to be stored
+     * @param entId     The Entity ID of the player whom this inventory belongs to
      */
-    public void storeInv(EntityPlayer player){
-        InventoryPlayer newInv = new InventoryPlayer(player);
-        newInv.copyInventory(player.inventory);
-        invs.add(new PlayerInv(player.getEntityId(),newInv));
+    public void storeInv(InventoryPlayer inv, int entId){
+        invs.add(new PlayerInv(entId,inv));
     }
 
     /**

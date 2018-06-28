@@ -1,27 +1,29 @@
-package com.venrob.robsstuff.items;
+package com.venrob.robsstuff.items.armor;
 
 import com.venrob.robsstuff.Main;
 import com.venrob.robsstuff.init.ModItems;
 import com.venrob.robsstuff.util.IHasModel;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemBase extends Item implements IHasModel {
+public class ArmorBase extends ItemArmor implements IHasModel {
     private boolean hasEnchantGlow;
     private String ttip;
 
-    public ItemBase(String name,boolean glow, int stack, @Nullable String ttip){
+    public ArmorBase(String name, boolean glow, ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn, @Nullable String ttip) {
+        super(materialIn, renderIndexIn, equipmentSlotIn);
         setUnlocalizedName(name);
         setRegistryName(name);
         setCreativeTab(Main.robsStuff);
-        setMaxStackSize(stack);
         this.hasEnchantGlow = glow;
-        this.ttip=ttip;
+        if(ttip!=null)
+            this.ttip=ttip;
         setup();
         ModItems.ITEMS.add(this);
     }

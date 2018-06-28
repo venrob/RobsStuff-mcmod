@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "robsstuff:items/emerald_hoe"
+  }
+}

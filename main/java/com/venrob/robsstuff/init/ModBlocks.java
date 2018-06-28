@@ -15,5 +15,5 @@ public class ModBlocks {
     //Tools: pickaxe, axe, shovel, sword
     //Light level: 0-15
     //Light opacity: 0 for glass, 3 for water/ice, -1 for solids
-    //public static final Block TEST_BLOCK = new BlockBase("test_block", Material.ROCK,0,-1,15,6000,false,"pickaxe",2);
+    public static Block STAR_BLOCK = new BlockBase("star_block",Material.ROCK,2,0,15,6000,false,"pickaxe",2);
 }

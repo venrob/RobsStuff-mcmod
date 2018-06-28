@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-      "all": "robsstuff:blocks/test_block"
+      "all": "robsstuff:blocks/star_block"
   }
 }
