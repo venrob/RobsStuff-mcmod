@@ -17,7 +17,6 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class ModRecipes {
     public static final List<IRecipe> RECIPES = new ArrayList<>();
-
     public static final IRecipe SOULBINDING = new RecipeBase(new ResourceLocation("robsstuff","soulbinding")) {
         @Override
         public boolean matches(InventoryCrafting inv, World worldIn) {
@@ -100,7 +99,7 @@ public class ModRecipes {
 
         @Override
         public ItemStack getRecipeOutput() {
-            return new ItemStack(ModItems.KEEPING_CHARM);
+            return ItemStack.EMPTY;
         }
     };
 }

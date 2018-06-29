@@ -1,19 +1,16 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "N",
-    "D"
-  ],
-  "key": {
-    "N": {
-      "item": "minecraft:nether_star"
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:nether_star",
+      "data": 0
     },
-    "D": {
-      "item": "minecraft:dragon_breath"
+    {
+      "item": "minecraft:dragon_breath",
+      "data": 0
     }
-  },
+  ],
   "result": {
     "item": "robsstuff:keeping_charm",
     "count": 1
-  }
 }

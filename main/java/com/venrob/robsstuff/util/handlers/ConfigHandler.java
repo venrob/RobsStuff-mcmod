@@ -9,34 +9,55 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class ConfigHandler {
-    private static File config;
+    private static BufferedReader reader;
+    private static boolean hardRecipes = false;
     public static ArrayList<Item> soulbindBlacklist;
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void preInit(){
         Main.logger.info("ConfigHandler PreInit...");
-        config = new File(Main.baseMCPath + "/config/RobsStuff/config.txt");
+        File config = new File(Main.baseMCPath + "/config/RobsStuff/config.txt");
         if(!config.exists()){
             try {
                 config.getParentFile().mkdirs();
                 config.createNewFile();
                 Main.logger.info("Creating \"/config/RobUtils/config.txt\"");
                 FileWriter writer = new FileWriter(config);
-                writer.append("//In the lines below, specify the backend-name of the items you wish to blacklist the soulbinding of.\r\n" +
+                writer.append(/*"//If true, harder recipes for some items will be used instead of the standard recipes.\r\n" +
+                        "hardRecipes:false\r\n" +*/
+                        "//In the lines below, specify the backend-name of the items you wish to blacklist the soulbinding of.\r\n" +
                         "//Example: to blacklist soulbinding of a diamond pick, you would type \"minecraft:diamond_pickaxe\".\r\n" +
                         "//Enter one of these, without any quotation marks, per line.\r\n");
                 writer.close();
             } catch (IOException e) {
-                Main.logger.warn("Could not create file \"/config/RobsStuff/config.txt\"!");
+                Main.logger.error("Could not create file \"/config/RobsStuff/config.txt\"!");
+                return;
             }
         }
+        try {
+            reader = new BufferedReader(new FileReader(config));
+        } catch (FileNotFoundException e) {
+            Main.logger.error("File missing \"/config/RobsStuff/config.txt\"!");
+            return;
+        }
+        /*try {
+            while (reader.ready()) {
+                String line = reader.readLine();
+                if (line.startsWith("//")) continue;
+                if(line.startsWith("hardRecipes")){
+                    hardRecipes = Boolean.parseBoolean(line.split(":",2)[1]);
+                }
+            }
+        }catch (IOException e){
+            Main.logger.error("IOException \"/config/RobsStuff/config.txt\"!");
+            //return;
+        }*/
     }
     public static void postInit(){
-        readConfig(config);
+        loadItems();
     }
-    private static void readConfig(File configFile){
+    private static void loadItems(){
         ArrayList<Item> out = new ArrayList<>();
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(configFile));
             while(reader.ready()) {
                 String line = reader.readLine();
                 if (line.startsWith("//")) continue;
