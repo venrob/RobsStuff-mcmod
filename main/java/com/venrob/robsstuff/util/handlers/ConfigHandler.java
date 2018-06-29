@@ -3,6 +3,7 @@ package com.venrob.robsstuff.util.handlers;
 import com.venrob.robsstuff.Main;
 import com.venrob.robsstuff.util.Utils;
 import net.minecraft.item.Item;
+import net.minecraftforge.fml.common.Loader;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -39,9 +40,27 @@ public class ConfigHandler {
             while(reader.ready()) {
                 String line = reader.readLine();
                 if (line.startsWith("//")) continue;
-                Item i = Item.getByNameOrId(line);
-                if (i != null) out.add(i);
-                break;
+                try {
+                    String[] args = line.split(":", 2);
+                    Item i = Item.getByNameOrId(line);
+                    if (i != null) out.add(i);
+                    if (i == null)
+                        if (Loader.isModLoaded(args[0])) {
+                            Main.logger.error("Mod \"" + args[0] + "\" is loaded, but cannot load item \"" + line + "\", it returns NULL");
+                        } else {
+                            Main.logger.error("Mod \"" + args[0] + "\" is not loaded! Cannot load item \"" + line + "\"");
+                        }
+                } catch(Exception e){
+                    StringBuilder str = new StringBuilder();
+                    str.append("RStuff: Error in item config loading for soulbinding blacklist:\n");
+                    str.append(e.getMessage());
+                    for(StackTraceElement s : e.getStackTrace()) {
+                        str.append("\n");
+                        str.append(s.toString());
+                    }
+                    str.append("\nThe item will be skipped! Please report this bug!");
+                    Main.logger.error(str.toString());
+                }
             }
             reader.close();
         } catch (IOException e) {
