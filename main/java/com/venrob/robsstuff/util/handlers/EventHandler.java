@@ -1,17 +1,16 @@
 package com.venrob.robsstuff.util.handlers;
 
-import com.venrob.robsstuff.Main;
+import com.venrob.robsstuff.init.ModEnchants;
 import com.venrob.robsstuff.init.ModItems;
 import com.venrob.robsstuff.util.datastore.PlayerInvStore;
 import com.venrob.robsstuff.util.exceptions.noSuchPlayerException;
-import javafx.scene.layout.Priority;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -22,7 +21,6 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @EventBusSubscriber
@@ -55,6 +53,7 @@ public class EventHandler {
                 InventoryPlayer newInv = new InventoryPlayer(player);
                 for (int i = 0; i < player.inventory.mainInventory.size(); i++) {
                     ItemStack stack = player.inventory.mainInventory.get(i);
+                    //noinspection ConstantConditions
                     if(stack.hasTagCompound()&&stack.getTagCompound().hasKey("rsSoulBind")) {
                         newInv.mainInventory.set(i,stack);
                         player.inventory.mainInventory.set(i,ItemStack.EMPTY);
@@ -62,6 +61,7 @@ public class EventHandler {
                 }
                 for (int i = 0; i < player.inventory.offHandInventory.size(); i++) {
                     ItemStack stack = player.inventory.offHandInventory.get(i);
+                    //noinspection ConstantConditions
                     if(stack.hasTagCompound()&&stack.getTagCompound().hasKey("rsSoulBind")) {
                         newInv.offHandInventory.set(i,stack);
                         player.inventory.offHandInventory.set(i,ItemStack.EMPTY);
@@ -69,6 +69,7 @@ public class EventHandler {
                 }
                 for (int i = 0; i < player.inventory.armorInventory.size(); i++) {
                     ItemStack stack = player.inventory.armorInventory.get(i);
+                    //noinspection ConstantConditions
                     if(stack.hasTagCompound()&&stack.getTagCompound().hasKey("rsSoulBind")) {
                         newInv.armorInventory.set(i,stack);
                         player.inventory.armorInventory.set(i,ItemStack.EMPTY);
@@ -148,13 +149,14 @@ public class EventHandler {
                 || item == Item.getByNameOrId("minecraft:diamond_chestplate")
                 || item == Item.getByNameOrId("minecraft:diamond_leggings")
                 || item == Item.getByNameOrId("minecraft:diamond_boots")){
-            event.getToolTip().add(1,"Set Bonus: Night Vision");
+            event.getToolTip().add(1,"Set Bonus: Resistance I");
             if (noEmpty)
                 emptyIndex = ttip.size()-1;
             else
                 emptyIndex+=1;
         }
         //Soulbound effect
+        //noinspection ConstantConditions
         if(stack.hasTagCompound()&&stack.getTagCompound().hasKey("rsSoulBind")) {
             event.getToolTip().add(emptyIndex, "Soulbound");
             if (noEmpty)
@@ -166,41 +168,49 @@ public class EventHandler {
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)
-    public static void onEveryPlayerTick(TickEvent.PlayerTickEvent event){
+    public static void onEveryPlayerTick(TickEvent.PlayerTickEvent event) {
         EntityPlayer player = event.player;
+        //Night Vision enchantment
+        if (EnchantmentHelper.getMaxEnchantmentLevel(ModEnchants.NIGHT_VISION, player) > 0)
+            player.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 20 * 11, 0, false, false));
         //Armor set bonuses
         NonNullList<ItemStack> armor = player.inventory.armorInventory;
-        if(armor.get(3).getItem()==Item.getByNameOrId("minecraft:leather_helmet")
-                && armor.get(2).getItem()==Item.getByNameOrId("minecraft:leather_chestplate")
-                && armor.get(1).getItem()==Item.getByNameOrId("minecraft:leather_leggings")
-                && armor.get(0).getItem()==Item.getByNameOrId("minecraft:leather_boots")){
-            player.addPotionEffect(new PotionEffect(MobEffects.SPEED,10,0,false,false));
-        } else if(armor.get(3).getItem()==Item.getByNameOrId("minecraft:chainmail_helmet")
-                && armor.get(2).getItem()==Item.getByNameOrId("minecraft:chainmail_chestplate")
-                && armor.get(1).getItem()==Item.getByNameOrId("minecraft:chainmail_leggings")
-                && armor.get(0).getItem()==Item.getByNameOrId("minecraft:chainmail_boots")){
-            player.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST,10,1,false,false));
-        } else if(armor.get(3).getItem()==Item.getByNameOrId("minecraft:iron_helmet")
-                && armor.get(2).getItem()==Item.getByNameOrId("minecraft:iron_chestplate")
-                && armor.get(1).getItem()==Item.getByNameOrId("minecraft:iron_leggings")
-                && armor.get(0).getItem()==Item.getByNameOrId("minecraft:iron_boots")){
-            player.addPotionEffect(new PotionEffect(MobEffects.HASTE,10,0,false,false));
-        } else if(armor.get(3).getItem()==Item.getByNameOrId("minecraft:golden_helmet")
-                && armor.get(2).getItem()==Item.getByNameOrId("minecraft:golden_chestplate")
-                && armor.get(1).getItem()==Item.getByNameOrId("minecraft:golden_leggings")
-                && armor.get(0).getItem()==Item.getByNameOrId("minecraft:golden_boots")){
-            if(!player.getActivePotionEffects().contains(player.getActivePotionEffect(MobEffects.ABSORPTION)))
-                player.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION,20*60,0,false,false));
-        } else if(armor.get(3).getItem()==Item.getByNameOrId("minecraft:diamond_helmet")
-                && armor.get(2).getItem()==Item.getByNameOrId("minecraft:diamond_chestplate")
-                && armor.get(1).getItem()==Item.getByNameOrId("minecraft:diamond_leggings")
-                && armor.get(0).getItem()==Item.getByNameOrId("minecraft:diamond_boots")){
-            player.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION,20*11,0,false,false));
-        } else if(armor.get(3).getItem()==ModItems.EMERALD_HELMET
-                && armor.get(2).getItem()==ModItems.EMERALD_CHESTPLATE
-                && armor.get(1).getItem()==ModItems.EMERALD_LEGGINGS
-                && armor.get(0).getItem()==ModItems.EMERALD_BOOTS){
-            player.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE,10,1,false,false));
+        if (!armor.contains(ItemStack.EMPTY))
+            if (armor.get(3).getItem() == Item.getByNameOrId("minecraft:leather_helmet")
+                    && armor.get(2).getItem() == Item.getByNameOrId("minecraft:leather_chestplate")
+                    && armor.get(1).getItem() == Item.getByNameOrId("minecraft:leather_leggings")
+                    && armor.get(0).getItem() == Item.getByNameOrId("minecraft:leather_boots")) {
+                player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 10, 0, false, false));
+            } else if (armor.get(3).getItem() == Item.getByNameOrId("minecraft:chainmail_helmet")
+                    && armor.get(2).getItem() == Item.getByNameOrId("minecraft:chainmail_chestplate")
+                    && armor.get(1).getItem() == Item.getByNameOrId("minecraft:chainmail_leggings")
+                    && armor.get(0).getItem() == Item.getByNameOrId("minecraft:chainmail_boots")) {
+                player.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 10, 1, false, false));
+            } else if (armor.get(3).getItem() == Item.getByNameOrId("minecraft:iron_helmet")
+                    && armor.get(2).getItem() == Item.getByNameOrId("minecraft:iron_chestplate")
+                    && armor.get(1).getItem() == Item.getByNameOrId("minecraft:iron_leggings")
+                    && armor.get(0).getItem() == Item.getByNameOrId("minecraft:iron_boots")) {
+                player.addPotionEffect(new PotionEffect(MobEffects.HASTE, 10, 0, false, false));
+            } else if (armor.get(3).getItem() == Item.getByNameOrId("minecraft:golden_helmet")
+                    && armor.get(2).getItem() == Item.getByNameOrId("minecraft:golden_chestplate")
+                    && armor.get(1).getItem() == Item.getByNameOrId("minecraft:golden_leggings")
+                    && armor.get(0).getItem() == Item.getByNameOrId("minecraft:golden_boots")) {
+                if (!player.getActivePotionEffects().contains(player.getActivePotionEffect(MobEffects.ABSORPTION)))
+                    player.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 20 * 60, 0, false, false));
+            } else if (armor.get(3).getItem() == Item.getByNameOrId("minecraft:diamond_helmet")
+                    && armor.get(2).getItem() == Item.getByNameOrId("minecraft:diamond_chestplate")
+                    && armor.get(1).getItem() == Item.getByNameOrId("minecraft:diamond_leggings")
+                    && armor.get(0).getItem() == Item.getByNameOrId("minecraft:diamond_boots")) {
+                player.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 10, 0, false, false));
+            } else if (armor.get(3).getItem() == ModItems.EMERALD_HELMET
+                    && armor.get(2).getItem() == ModItems.EMERALD_CHESTPLATE
+                    && armor.get(1).getItem() == ModItems.EMERALD_LEGGINGS
+                    && armor.get(0).getItem() == ModItems.EMERALD_BOOTS) {
+                player.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 10, 1, false, false));
+            }
+        //Sating Rod
+        if (event.player.world.getTotalWorldTime() % 40 == 0 && (player.getHeldItemMainhand().getItem() == ModItems.SATING_ROD || player.getHeldItemOffhand().getItem() == ModItems.SATING_ROD)) {
+            player.getFoodStats().addStats(1, 0.2f);
         }
     }
 }

@@ -18,6 +18,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 
+@SuppressWarnings("unused")
 @Mod(modid = Reference.MOD_ID, name = Reference.NAME, version = Reference.VERSION)
 public class Main {
     public static final CreativeTabs robsStuff = new CreativeTabs("RobsStuff") {

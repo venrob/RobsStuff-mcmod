@@ -17,7 +17,7 @@ public class ToolAxe extends ItemAxe implements IHasModel {
     private String ttip;
 
     public ToolAxe(String name, Item.ToolMaterial material, boolean glow, @Nullable String ttip){
-        super(material, 4.0F + material.getAttackDamage(), -3.0F);
+        super(material, 6.0F + material.getAttackDamage(), -3.0F);
         setUnlocalizedName(name);
         setRegistryName(name);
         setCreativeTab(Main.robsStuff);

@@ -1,6 +1,7 @@
 item.keeping_medal.name=Medallion of Keeping
 item.keeping_medal_off.name=Medallion of Keeping (inactive)
 item.keeping_charm.name=Charm of Keeping
+item.sating_rod.name=Sating Rod
 
 item.emerald_sword.name=Emerald Sword
 item.emerald_hoe.name=Emerald Hoe
@@ -12,6 +13,8 @@ item.emerald_helmet.name=Emerald Helmet
 item.emerald_chestplate.name=Emerald Chestplate
 item.emerald_leggings.name=Emerald Leggings
 item.emerald_boots.name=Emerald Boots
+
+enchantment.night_vision=Night Vision
 
 tile.star_block.name=Nether Star Block
 

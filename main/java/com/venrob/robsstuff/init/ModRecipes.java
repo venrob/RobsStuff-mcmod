@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class ModRecipes {
     public static final List<IRecipe> RECIPES = new ArrayList<>();
 
@@ -38,6 +39,7 @@ public class ModRecipes {
                         target = is;
                 } else return false;
             }
+            //noinspection ConstantConditions
             return charm!=null&&target!=null&&!ConfigHandler.soulbindBlacklist.contains(target.getItem())&&(!target.hasTagCompound()||!target.getTagCompound().hasKey("rsSoulBind"));
         }
 
@@ -60,8 +62,7 @@ public class ModRecipes {
                         target = is;
                 }
             }
-            if(ConfigHandler.soulbindBlacklist.contains(target.getItem())) {
-                target = null;
+            if(target!=null&&ConfigHandler.soulbindBlacklist.contains(target.getItem())) {
                 Main.logger.error("Target blacklisted yet recipe matches? Recipe error @ ModRecipes.SOULBINDING!\r\n" +
                         "Please report this as an issue on CurseForge, including this full error message!");
                 return ItemStack.EMPTY;
