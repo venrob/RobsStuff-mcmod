@@ -41,7 +41,7 @@ public class EventHandler {
                 }
             }
             ItemStack offhand = player.inventory.offHandInventory.get(0);
-            if (offhand.getItem().equals(ModItems.KEEP_MEDAL)) {//Same check as above, for offhand slot
+            if (!hasMedal&&offhand.getItem().equals(ModItems.KEEP_MEDAL)) {//Same check as above, for offhand slot
                 offhand.setCount(offhand.getCount() - 1);
                 player.inventory.addItemStackToInventory(new ItemStack(ModItems.KEEP_MEDAL_OFF));
                 hasMedal = true;
