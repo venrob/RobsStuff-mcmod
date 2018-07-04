@@ -5,8 +5,8 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 
 public interface IInventoryBackup {
-    InventoryPlayer getInv();
+    ItemStack[][] getInv();
     void storeInv(InventoryPlayer store);
-    void storeInv(ItemStack[] main, ItemStack[] armor, ItemStack offhand);
+    void storeInv(ItemStack[][] inv);
     void setPlayer(EntityPlayer player);
 }

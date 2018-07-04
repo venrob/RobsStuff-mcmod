@@ -4,6 +4,7 @@ import com.venrob.robsstuff.Main;
 import com.venrob.robsstuff.capabilities.IInventoryBackup;
 import com.venrob.robsstuff.init.ModEnchants;
 import com.venrob.robsstuff.init.ModItems;
+import com.venrob.robsstuff.util.Utils;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -22,6 +23,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @EventBusSubscriber
@@ -87,17 +89,38 @@ public class EventHandler {
     @SubscribeEvent(priority=EventPriority.HIGHEST)
     public static void restoreInvOnRespawn(PlayerEvent.Clone event){
         EntityPlayer player = event.getEntityPlayer();
-        IInventoryBackup invCapa = CapabilityHandler.getCapabilityInv(player);
+        EntityPlayer original = event.getOriginal();
+        IInventoryBackup invCapa = CapabilityHandler.getCapabilityInv(original);
         if(invCapa==null){
             Main.logger.error("EntityPlayer " + player.getDisplayNameString() + " lacks registered IInventoryBackup capability!");//TODO temp
             return;
         }
-        EntityPlayer original = event.getOriginal();
-        EntityPlayer clone = event.getEntityPlayer();
         if(event.isWasDeath()){
-            InventoryPlayer newInv = invCapa.getInv();
-            if(newInv!=null)
-                clone.inventory.copyInventory(newInv);
+            ItemStack[][] newInv = invCapa.getInv();
+            ArrayList<ItemStack> extra = new ArrayList<>();
+            NonNullList<ItemStack> main = player.inventory.mainInventory;
+            for(int i = 0;i<main.size();i++) {
+                if(main.get(i)!=ItemStack.EMPTY)
+                    extra.add(main.get(i));
+                main.set(i,newInv[0][i]);
+            }
+            NonNullList<ItemStack> armor = player.inventory.armorInventory;
+            for(int i = 0;i<armor.size();i++) {
+                if(armor.get(i)!=ItemStack.EMPTY)
+                    extra.add(armor.get(i));
+                armor.set(i,newInv[1][i]);
+            }
+            NonNullList<ItemStack> off = player.inventory.offHandInventory;
+            for(int i = 0;i<off.size();i++) {
+                if(off.get(i)!=ItemStack.EMPTY)
+                    extra.add(off.get(i));
+                off.set(i,newInv[2][i]);
+            }
+            /*
+            for(ItemStack its : extra){
+                player.inventory.addItemStackToInventory(its);
+            }//*/
+
         } else {
             if(CapabilityHandler.hasCapabilityInv(original)&&CapabilityHandler.hasCapabilityInv(player))
                 CapabilityHandler.getCapabilityInv(player).storeInv(CapabilityHandler.getCapabilityInv(original).getInv());

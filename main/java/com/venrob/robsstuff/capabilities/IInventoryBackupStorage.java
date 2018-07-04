@@ -1,53 +1,52 @@
 package com.venrob.robsstuff.capabilities;
 
-import com.mojang.authlib.GameProfile;
 import com.venrob.robsstuff.Main;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nullable;
 
 public class IInventoryBackupStorage implements Capability.IStorage<IInventoryBackup> {
 
+    @SuppressWarnings("Duplicates")
     @Nullable
     @Override
     public NBTBase writeNBT(Capability<IInventoryBackup> capability, IInventoryBackup instance, EnumFacing side) {
         NBTTagList taglist = new NBTTagList();
-        InventoryPlayer inv = instance.getInv();
-        if(inv!=null) {
-            for (int i = 0; i < inv.mainInventory.size(); i++) {
-                byte slot = (byte) i;
-                ItemStack its = inv.mainInventory.get(i);
-                Main.logger.info(its.getItem().getRegistryName());
-                NBTTagCompound tag = new NBTTagCompound();
-                tag.setByte("Slot", slot);
-                its.writeToNBT(tag);
-                taglist.appendTag(tag);
-            }
-            for (int i = 0; i < inv.armorInventory.size(); i++) {
-                byte slot = (byte) (i + inv.mainInventory.size());
-                ItemStack its = inv.armorInventory.get(i);
-                Main.logger.info(its.getItem().getRegistryName());
-                NBTTagCompound tag = new NBTTagCompound();
-                tag.setByte("Slot", slot);
-                its.writeToNBT(tag);
-                taglist.appendTag(tag);
-            }
-            {
-                ItemStack its = inv.offHandInventory.get(0);
-                Main.logger.info(its.getItem().getRegistryName());
-                NBTTagCompound tag = new NBTTagCompound();
-                tag.setByte("Slot", (byte) (inv.mainInventory.size() + inv.armorInventory.size()));
-                its.writeToNBT(tag);
-                taglist.appendTag(tag);
-            }
+        ItemStack[][] inv = instance.getInv();
+        ItemStack[] main = inv[0];
+        ItemStack[] armor = inv[1];
+        ItemStack[] offhand = inv[2];
+        byte slot = 0;
+        for (int i = 0; i < main.length; i++) {
+            ItemStack its = main[i];
+            if(its==null)its=ItemStack.EMPTY;
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setByte("Slot", slot);
+            its.writeToNBT(tag);
+            taglist.appendTag(tag);
+            slot++;
+        }
+        for (int i = 0; i < armor.length; i++) {
+            ItemStack its = armor[i];
+            if(its==null)its=ItemStack.EMPTY;
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setByte("Slot", slot);
+            its.writeToNBT(tag);
+            taglist.appendTag(tag);
+            slot++;
+        }
+        for(int i = 0; i < offhand.length;i++){
+            ItemStack its = offhand[i];
+            if(its==null)its=ItemStack.EMPTY;
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setByte("Slot", slot);
+            its.writeToNBT(tag);
+            taglist.appendTag(tag);
         }
         return taglist;
     }
@@ -61,13 +60,16 @@ public class IInventoryBackupStorage implements Capability.IStorage<IInventoryBa
         for(int i = 0;i<taglist.tagCount();i++){
             NBTTagCompound tag = (NBTTagCompound)taglist.get(i);
             byte slot = tag.getByte("Slot");
-            if(slot>=0&&slot<36)
+            if(slot>=0&&slot<36) {
                 main[slot] = new ItemStack(tag);
-            if(slot>=36&&slot<40)
-                armor[slot-36] = new ItemStack(tag);
-            if(slot==40)
+                if(main[slot]==null)main[slot]=ItemStack.EMPTY;
+            } else if(slot>=36&&slot<40) {
+                armor[slot - 36] = new ItemStack(tag);
+                if(armor[slot - 36]==null)armor[slot - 36]=ItemStack.EMPTY;
+            } else if(slot==40) {
                 offhand = new ItemStack(tag);
+            }
         }
-        instance.storeInv(main, armor, offhand);
+        instance.storeInv(new ItemStack[][]{main, armor, new ItemStack[]{offhand}});
     }
 }
