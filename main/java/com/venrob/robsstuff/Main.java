@@ -1,5 +1,8 @@
 package com.venrob.robsstuff;
 
+import com.venrob.robsstuff.capabilities.DefaultInventoryBackup;
+import com.venrob.robsstuff.capabilities.IInventoryBackup;
+import com.venrob.robsstuff.capabilities.IInventoryBackupStorage;
 import com.venrob.robsstuff.init.ModItems;
 import com.venrob.robsstuff.proxy.CommonProxy;
 import com.venrob.robsstuff.util.Reference;
@@ -7,6 +10,7 @@ import com.venrob.robsstuff.util.handlers.ConfigHandler;
 import com.venrob.robsstuff.util.handlers.RegistryHandler;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -41,6 +45,7 @@ public class Main {
         baseMCPath = new File(".").getAbsolutePath();
         logger = event.getModLog();
         ConfigHandler.preInit();
+        registerCapabilities();
     }
 
     @EventHandler
@@ -53,4 +58,7 @@ public class Main {
         ConfigHandler.postInit();
     }
 
+    public static void registerCapabilities(){
+        CapabilityManager.INSTANCE.register(IInventoryBackup.class,new IInventoryBackupStorage(),DefaultInventoryBackup.class);
+    }
 }
