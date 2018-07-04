@@ -19,9 +19,9 @@ public class CapabilityHandler {
     public static final Capability<IInventoryBackup> CAPABILITY_INVBACKUP = null;
 
     @SubscribeEvent
-    public void attachCapabilityEntity(AttachCapabilitiesEvent<Entity> event){
+    public static void attachCapabilityEntity(AttachCapabilitiesEvent<Entity> event){
         if(event.getObject() instanceof EntityPlayer)
-            event.addCapability(new ResourceLocation(Reference.MOD_ID,"inventoryBackup"),new IInventoryBackupProvider());
+            event.addCapability(new ResourceLocation(Reference.MOD_ID,"inventoryBackup"),new IInventoryBackupProvider((EntityPlayer)event.getObject()));
     }
 
     public static IInventoryBackup getCapabilityInv(Entity entity){

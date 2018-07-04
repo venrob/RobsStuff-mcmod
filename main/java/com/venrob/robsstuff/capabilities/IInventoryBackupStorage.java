@@ -1,5 +1,8 @@
 package com.venrob.robsstuff.capabilities;
 
+import com.mojang.authlib.GameProfile;
+import com.venrob.robsstuff.Main;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -18,28 +21,33 @@ public class IInventoryBackupStorage implements Capability.IStorage<IInventoryBa
     public NBTBase writeNBT(Capability<IInventoryBackup> capability, IInventoryBackup instance, EnumFacing side) {
         NBTTagList taglist = new NBTTagList();
         InventoryPlayer inv = instance.getInv();
-        for(int i = 0;i<inv.mainInventory.size();i++){
-            byte slot = (byte)i;
-            ItemStack its = inv.mainInventory.get(i);
-            NBTTagCompound tag = new NBTTagCompound();
-            tag.setByte("Slot",slot);
-            its.writeToNBT(tag);
-            taglist.appendTag(tag);
-        }
-        for(int i = 0;i<inv.armorInventory.size();i++){
-            byte slot = (byte)(i + inv.mainInventory.size());
-            ItemStack its = inv.armorInventory.get(i);
-            NBTTagCompound tag = new NBTTagCompound();
-            tag.setByte("Slot",slot);
-            its.writeToNBT(tag);
-            taglist.appendTag(tag);
-        }
-        {
-            ItemStack its = inv.offHandInventory.get(0);
-            NBTTagCompound tag = new NBTTagCompound();
-            tag.setByte("Slot",(byte)(inv.mainInventory.size() + inv.armorInventory.size()));
-            its.writeToNBT(tag);
-            taglist.appendTag(tag);
+        if(inv!=null) {
+            for (int i = 0; i < inv.mainInventory.size(); i++) {
+                byte slot = (byte) i;
+                ItemStack its = inv.mainInventory.get(i);
+                Main.logger.info(its.getItem().getRegistryName());
+                NBTTagCompound tag = new NBTTagCompound();
+                tag.setByte("Slot", slot);
+                its.writeToNBT(tag);
+                taglist.appendTag(tag);
+            }
+            for (int i = 0; i < inv.armorInventory.size(); i++) {
+                byte slot = (byte) (i + inv.mainInventory.size());
+                ItemStack its = inv.armorInventory.get(i);
+                Main.logger.info(its.getItem().getRegistryName());
+                NBTTagCompound tag = new NBTTagCompound();
+                tag.setByte("Slot", slot);
+                its.writeToNBT(tag);
+                taglist.appendTag(tag);
+            }
+            {
+                ItemStack its = inv.offHandInventory.get(0);
+                Main.logger.info(its.getItem().getRegistryName());
+                NBTTagCompound tag = new NBTTagCompound();
+                tag.setByte("Slot", (byte) (inv.mainInventory.size() + inv.armorInventory.size()));
+                its.writeToNBT(tag);
+                taglist.appendTag(tag);
+            }
         }
         return taglist;
     }
